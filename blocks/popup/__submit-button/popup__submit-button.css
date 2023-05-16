@@ -1,0 +1,17 @@
+.popup__submit-button {
+  background-color: black;
+  color: white;
+  border-radius: 2px;
+  font-family: 'Inter', serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  padding: 14px 0 18px;
+  overflow: hidden;
+  border: none;
+  transition: background-color linear 0.1s;
+}
+
+.popup__submit-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}

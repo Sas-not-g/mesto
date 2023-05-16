@@ -1,0 +1,11 @@
+.input {
+  font-family: 'Inter', serif;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  padding-bottom: 13px;
+  margin-bottom: 48px;
+}
+
+.input:first-of-type {
+  margin-bottom: 30px;
+}
