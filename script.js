@@ -1,7 +1,7 @@
 let editButton = document.querySelector('.button_type_edit');
 let saveButton = document.querySelector('.button_type_submit');
 let cancelButton = document.querySelector('.button_type_cancel');
-let likeButtons = document.querySelector('.like-button');
+let likeButtons = document.querySelector('.button_type_like');
 let popup = document.querySelector('.popup');
 let grid = document.querySelector('.photo-grid');
 
