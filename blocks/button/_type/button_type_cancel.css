@@ -1,0 +1,12 @@
+.button_type_cancel {
+  width: 32px;
+  padding-bottom: 8px;
+  align-self: flex-end;
+}
+
+@media screen and (max-width: 1279px) {
+  .button_type_cancel {
+    width: 20px;
+    padding-bottom: 16px;
+  }
+}

@@ -13,6 +13,9 @@
 @import url('../blocks/profile/__user-job/profile__user-job.css');
 @import url('../blocks/button/_type/button_type_add.css');
 @import url('../blocks/button/_type/button_type_edit.css');
+@import url('../blocks/button/_type/button_type_cancel.css');
+@import url('../blocks/button/_type/button_type_submit.css');
+@import url('../blocks/button/_condition/button_condition_active.css');
 @import url('../blocks/button/__plus-icon/button__plus-icon.css');
 @import url('../blocks/photo-grid/photo-grid.css');
 @import url('../blocks/photo-grid/__element/photo-grid__element.css');
@@ -22,9 +25,9 @@
 @import url('../blocks/footer/footer.css');
 @import url('../blocks/footer/__copyright/footer__copyright.css');
 @import url('../blocks/popup/popup.css');
+@import url('../blocks/popup/_opened/popup_opened.css');
+@import url('../blocks/popup/__content/popup__content.css');
 @import url('../blocks/popup/__container/popup__container.css');
 @import url('../blocks/popup/__heading/popup__heading.css');
+@import url('../blocks/popup/__input/popup__input.css');
 @import url('../blocks/popup/__submit-button/popup__submit-button.css');
-@import url('../blocks/input/input.css');
-@import url('../blocks/disabled/disabled.css');
-@import url('../blocks/active/active.css');
