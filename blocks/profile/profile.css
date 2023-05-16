@@ -8,5 +8,6 @@
   .profile {
     flex-direction: column;
     flex-wrap: wrap;
+    padding-bottom: 36px;
   }
 }

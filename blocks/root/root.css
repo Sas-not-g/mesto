@@ -1,7 +1,7 @@
 .root {
   display: flex;
-  padding-top: 45px;
-  width: 100%;
+  width: 880px;
+  padding: 45px calc((100% - 880px) / 2) 0;
   align-items: center;
   flex-direction: column;
   background-color: #000000;

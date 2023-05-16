@@ -1,11 +1,11 @@
-.profile__name {
+.profile__name-block {
   display: flex;
   align-items: baseline;
   padding-bottom: 16px;
 }
 
 @media screen and (max-width: 1279px) {
-  .profile__name {
+  .profile__name-block {
     display: flex;
     justify-content: center;
     padding-left: 18px;

@@ -9,7 +9,7 @@ function openPopup() {
   popup.classList.add('popup_opened');
 
   let name = document.querySelector('.profile__username');
-  let job = document.querySelector('.profile__user-job');
+  let job = document.querySelector('.profile__job');
   let formName = document.querySelector('.popup__input_type_name');
   let formJob = document.querySelector('.popup__input_type_job');
 
@@ -31,7 +31,7 @@ function openPopup() {
 
 grid.addEventListener('click', function (event) {
   let clicked_element = event.target;
-  if (clicked_element.classList.contains('like-button')) {
+  if (clicked_element.classList.contains('button_type_like')) {
     if (clicked_element.classList.contains('button_condition_active')) {
       clicked_element.classList.remove('button_condition_active');
       clicked_element.setAttribute('src', 'images/like_disabled.svg');

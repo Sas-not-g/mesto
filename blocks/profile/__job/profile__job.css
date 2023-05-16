@@ -1,4 +1,4 @@
-.profile__user-job {
+.profile__job {
   font-family: 'Inter', serif;
   font-weight: 400;
   font-size: 18px;
@@ -11,7 +11,7 @@
 }
 
 @media screen and (max-width: 1279px) {
-  .profile__user-job {
+  .profile__job {
     font-size: 14px;
     line-height: 17px;
     padding-bottom: 36px;
