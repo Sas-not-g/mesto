@@ -1,9 +1,0 @@
-.button__plus-icon {
-  width: 22px;
-}
-
-@media screen and (max-width: 1279px) {
-  .button__plus-icon {
-    width: 16px;
-  }
-}

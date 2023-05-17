@@ -1,5 +1,5 @@
 .profile__job {
-  font-family: 'Inter', serif;
+  font-family: 'Inter', 'Arial', sans-serif;
   font-weight: 400;
   font-size: 18px;
   line-height: 22px;
@@ -15,7 +15,6 @@
     font-size: 14px;
     line-height: 17px;
     padding-bottom: 36px;
-    text-align: center;
     align-self: center;
     max-width: calc(((100% - 20px) / 6) * 4);
   }
