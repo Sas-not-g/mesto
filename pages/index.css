@@ -21,9 +21,6 @@
 @import url('../blocks/popup/__button/popup__button.css');
 @import url('../blocks/popup/__button/_type/popup__button_type_cancel.css');
 @import url('../blocks/popup/__button/_type/popup__button_type_submit.css');
-@import url('../blocks/button/button.css');
-@import url('../blocks/button/_type/button_type_like.css');
-@import url('../blocks/button/_condition/button_condition_active.css');
 @import url('../blocks/photo-grid/photo-grid.css');
 @import url('../blocks/photo-grid/__element/photo-grid__element.css');
 @import url('../blocks/photo-grid/__picture/photo-grid__picture.css');
