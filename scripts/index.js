@@ -150,6 +150,9 @@ function addCard() {
   descriptionBar.append(descriptionTitle, photoGridLike);
   photoGridElement.append(photoGridDelete, photoGridImage, descriptionBar);
   grid.prepend(photoGridElement);
+
+  formLink.value = '';
+  formPlace.value = '';
 }
 
 saveButton.forEach(button => button.addEventListener('submit', submit));
