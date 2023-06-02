@@ -1,20 +1,21 @@
 const editButton = document.querySelector('.profile__button_type_edit');
-const saveButton = document.querySelectorAll('.popup__form');
-const cancelButton = document.querySelectorAll('.popup__button_type_cancel');
+const cancelButtons = document.querySelectorAll('.popup__button_type_cancel');
 const addButton = document.querySelector('.profile__button_type_add');
-const popup = document.querySelector('.popup');
-let username = document.querySelector('.profile__username');
-let job = document.querySelector('.profile__job');
-let formName = document.querySelector('.popup__input_type_name');
-let formJob = document.querySelector('.popup__input_type_job');
-let formPlace = document.querySelector('.popup__input_type_place-name');
-let formLink = document.querySelector('.popup__input_type_place-link');
+const userName = document.querySelector('.profile__username');
+const job = document.querySelector('.profile__job');
+const formName = document.querySelector('.popup__input_type_name');
+const formJob = document.querySelector('.popup__input_type_job');
+const formPlace = document.querySelector('.popup__input_type_place-name');
+const formLink = document.querySelector('.popup__input_type_place-link');
 const grid = document.querySelector('.photo-grid');
 const popupEdit = document.querySelector('.popup_type_edit');
 const popupAdd = document.querySelector('.popup_type_add');
 const popupPicture = document.querySelector('.popup_type_picture');
 const popupImageElement = document.querySelector('.popup__picture');
+const profileForm = popupEdit.querySelector('.popup__form');
+const cardForm = popupAdd.querySelector('.popup__form');
 const popupPictureCaption = document.querySelector('.popup__picture-caption');
+const gridCardTemplateContent = document.querySelector('.cardTemplate').content;
 
 const initialCards = [
   {
@@ -44,121 +45,86 @@ const initialCards = [
 ];
 
 initialCards.forEach(card => {
-  const photoGridElement = document.createElement('li');
-  const photoGridImage = document.createElement('img');
-  const descriptionBar = document.createElement('div');
-  const descriptionTitle = document.createElement('h2');
-  const photoGridLike = document.createElement('button');
-  const photoGridDelete = document.createElement('button');
-
-  photoGridElement.classList.add('photo-grid__element');
-  photoGridImage.classList.add('photo-grid__picture');
-  descriptionBar.classList.add('photo-grid__description-bar');
-  descriptionTitle.classList.add('photo-grid__description');
-  photoGridLike.classList.add('photo-grid__like-button');
-  photoGridDelete.classList.add('photo-grid__delete-button');
-
-  photoGridImage.setAttribute('src', card.link);
-  photoGridImage.setAttribute('alt', card.name);
-
-  descriptionTitle.textContent = card.name;
-  photoGridLike.setAttribute('type', 'button');
-  photoGridDelete.setAttribute('type', 'button');
-
-  descriptionBar.append(descriptionTitle, photoGridLike);
-  photoGridElement.append(photoGridDelete, photoGridImage, descriptionBar);
-  grid.append(photoGridElement);
+  const gridElement = createCard(card);
+  grid.append(gridElement);
 });
+
+function createCard(card) {
+  const gridCard = gridCardTemplateContent.cloneNode(true);
+  const gridCardImage = gridCard.querySelector('.photo-grid__picture');
+  const gridCardLike = gridCard.querySelector('.photo-grid__like-button');
+  const gridCardDelete = gridCard.querySelector('.photo-grid__delete-button');
+  gridCardImage.addEventListener('click', openPicture);
+  gridCardLike.addEventListener('click', like);
+  gridCardDelete.addEventListener('click', deleteCard);
+
+  if (card) {
+    gridCardImage.setAttribute('src', card.link);
+    gridCardImage.setAttribute('alt', card.name);
+    gridCard.querySelector('.photo-grid__description').textContent = card.name;
+  } else {
+    gridCardImage.setAttribute('src', formLink.value);
+    gridCardImage.setAttribute('alt', formPlace.value);
+    gridCard.querySelector('.photo-grid__description').textContent = formPlace.value;
+    console.log('ssss');
+  }
+
+  return gridCard;
+}
 
 function openPopup(chosenPopup) {
   chosenPopup.classList.add('popup_opened');
-  formName.value = username.textContent;
-  formJob.value = job.textContent;
 }
 
-function submit(event) {
+function handleProfileFormSubmit(event) {
   event.preventDefault();
-  let clicked_button = event.target;
-  let parentPopup = clicked_button.closest('.popup');
-  if (parentPopup.classList.contains('popup_type_edit')) {
-    username.textContent = formName.value;
-    job.textContent = formJob.value;
-  }
-  if (parentPopup.classList.contains('popup_type_add')) {
-    addCard();
-  }
-
-  parentPopup.classList.remove('popup_opened');
+  userName.textContent = formName.value;
+  job.textContent = formJob.value;
+  closePopup(popupEdit);
 }
 
-function cancel(event) {
-  let clickedButton = event.target;
-  clickedButton.closest('.popup').classList.remove('popup_opened');
+function handleCardFormSubmit(event) {
+  event.preventDefault();
+  const gridElement = createCard();
+  grid.prepend(gridElement);
+  closePopup(popupAdd);
+  event.target.reset();
+}
+
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
 }
 
 function like(event) {
-  let clicked_element = event.target;
-  if (clicked_element.classList.contains('photo-grid__like-button')) {
-    if (clicked_element.classList.contains('photo-grid__like-button_active')) {
-      clicked_element.classList.remove('photo-grid__like-button_active');
-    } else {
-      clicked_element.classList.add('photo-grid__like-button_active');
-    }
-  }
+  event.target.classList.toggle('photo-grid__like-button_active');
 }
 
 function deleteCard(event) {
-  let clicked_element = event.target;
-  if (clicked_element.classList.contains('photo-grid__delete-button')) {
-    clicked_element.closest('.photo-grid__element').remove();
-  }
+  event.target.closest('.photo-grid__element').remove();
 }
 
 function openPicture(event) {
-  let clicked_element = event.target;
-  if (clicked_element.classList.contains('photo-grid__picture')) {
-    popupImageElement.src = clicked_element.src;
-    popupPictureCaption.textContent = clicked_element.parentNode.querySelector(
-      '.photo-grid__description'
-    ).textContent;
-    openPopup(popupPicture);
-  }
+  const clickedElement = event.target;
+  popupImageElement.src = clickedElement.src;
+  popupImageElement.alt = clickedElement.alt;
+  popupPictureCaption.textContent = clickedElement
+    .closest('.photo-grid__element')
+    .querySelector('.photo-grid__description').textContent;
+  openPopup(popupPicture);
 }
 
-function addCard() {
-  const photoGridElement = document.createElement('li');
-  const photoGridImage = document.createElement('img');
-  const descriptionBar = document.createElement('div');
-  const descriptionTitle = document.createElement('h2');
-  const photoGridLike = document.createElement('button');
-  const photoGridDelete = document.createElement('button');
+cancelButtons.forEach(button => {
+  const popup = button.closest('.popup');
+  button.addEventListener('click', () => closePopup(popup));
+});
 
-  photoGridElement.classList.add('photo-grid__element');
-  photoGridImage.classList.add('photo-grid__picture');
-  descriptionBar.classList.add('photo-grid__description-bar');
-  descriptionTitle.classList.add('photo-grid__description');
-  photoGridLike.classList.add('photo-grid__like-button');
-  photoGridDelete.classList.add('photo-grid__delete-button');
+editButton.addEventListener('click', () => {
+  formName.value = userName.textContent;
+  formJob.value = job.textContent;
+  openPopup(popupEdit);
+});
 
-  photoGridImage.setAttribute('src', formLink.value);
-  photoGridImage.setAttribute('alt', formPlace.value);
-
-  descriptionTitle.textContent = formPlace.value;
-  photoGridLike.setAttribute('type', 'button');
-  photoGridDelete.setAttribute('type', 'button');
-
-  descriptionBar.append(descriptionTitle, photoGridLike);
-  photoGridElement.append(photoGridDelete, photoGridImage, descriptionBar);
-  grid.prepend(photoGridElement);
-
-  formLink.value = '';
-  formPlace.value = '';
-}
-
-saveButton.forEach(button => button.addEventListener('submit', submit));
-cancelButton.forEach(button => button.addEventListener('click', cancel));
-editButton.addEventListener('click', () => openPopup(popupEdit));
 addButton.addEventListener('click', () => openPopup(popupAdd));
-grid.addEventListener('click', like);
-grid.addEventListener('click', deleteCard);
-grid.addEventListener('click', openPicture);
+
+profileForm.addEventListener('submit', handleProfileFormSubmit);
+cardForm.addEventListener('submit', handleCardFormSubmit);
