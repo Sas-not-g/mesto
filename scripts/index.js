@@ -54,20 +54,14 @@ function createCard(card) {
   const gridCardImage = gridCard.querySelector('.photo-grid__picture');
   const gridCardLike = gridCard.querySelector('.photo-grid__like-button');
   const gridCardDelete = gridCard.querySelector('.photo-grid__delete-button');
-  gridCardImage.addEventListener('click', openPicture);
+  gridCardImage.addEventListener('click', () => openPicture(card.link, card.name));
   gridCardLike.addEventListener('click', like);
   gridCardDelete.addEventListener('click', deleteCard);
 
-  if (card) {
-    gridCardImage.setAttribute('src', card.link);
-    gridCardImage.setAttribute('alt', card.name);
-    gridCard.querySelector('.photo-grid__description').textContent = card.name;
-  } else {
-    gridCardImage.setAttribute('src', formLink.value);
-    gridCardImage.setAttribute('alt', formPlace.value);
-    gridCard.querySelector('.photo-grid__description').textContent = formPlace.value;
-    console.log('ssss');
-  }
+  gridCardImage.setAttribute('src', card.link);
+  gridCardImage.setAttribute('alt', card.name);
+  console.log(card.name);
+  gridCard.querySelector('.photo-grid__description').textContent = card.name;
 
   return gridCard;
 }
@@ -85,7 +79,11 @@ function handleProfileFormSubmit(event) {
 
 function handleCardFormSubmit(event) {
   event.preventDefault();
-  const gridElement = createCard();
+  const placeFormValues = {
+    name: formPlace.value,
+    link: formLink.value
+  };
+  const gridElement = createCard(placeFormValues);
   grid.prepend(gridElement);
   closePopup(popupAdd);
   event.target.reset();
@@ -103,13 +101,10 @@ function deleteCard(event) {
   event.target.closest('.photo-grid__element').remove();
 }
 
-function openPicture(event) {
-  const clickedElement = event.target;
-  popupImageElement.src = clickedElement.src;
-  popupImageElement.alt = clickedElement.alt;
-  popupPictureCaption.textContent = clickedElement
-    .closest('.photo-grid__element')
-    .querySelector('.photo-grid__description').textContent;
+function openPicture(cardLink, cardName) {
+  popupImageElement.src = cardLink;
+  popupImageElement.alt = cardName;
+  popupPictureCaption.textContent = cardName;
   openPopup(popupPicture);
 }
 
