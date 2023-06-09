@@ -19,9 +19,12 @@
 @import url('../blocks/popup/__content/popup__content.css');
 @import url('../blocks/popup/__heading/popup__heading.css');
 @import url('../blocks/popup/__input/popup__input.css');
+@import url('../blocks/popup/__form-field/popup__form-field.css');
+@import url('../blocks/popup/__form-input-error/popup__form-input-error.css');
 @import url('../blocks/popup/__button/popup__button.css');
 @import url('../blocks/popup/__button/_type/popup__button_type_cancel.css');
 @import url('../blocks/popup/__button/_type/popup__button_type_submit.css');
+@import url('../blocks/popup/__button/_disabled/popup__button_disabled.css');
 @import url('../blocks/popup/__picture/popup__picture.css');
 @import url('../blocks/popup/__picture-caption/popup__picture-caption.css');
 @import url('../blocks/popup/_type/popup_type_add.css');

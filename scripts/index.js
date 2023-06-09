@@ -49,6 +49,11 @@ initialCards.forEach(card => {
   grid.append(gridElement);
 });
 
+function setFormValuesOnLaunch() {
+  formName.value = userName.textContent;
+  formJob.value = job.textContent;
+}
+
 function createCard(card) {
   const gridCard = gridCardTemplateContent.cloneNode(true);
   const gridCardImage = gridCard.querySelector('.photo-grid__picture');
@@ -68,6 +73,7 @@ function createCard(card) {
 
 function openPopup(chosenPopup) {
   chosenPopup.classList.add('popup_opened');
+  setPopupEventListeners(chosenPopup);
 }
 
 function handleProfileFormSubmit(event) {
@@ -91,6 +97,7 @@ function handleCardFormSubmit(event) {
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  removePopupEventListeners(popup);
 }
 
 function like(event) {
@@ -108,14 +115,33 @@ function openPicture(cardLink, cardName) {
   openPopup(popupPicture);
 }
 
+function setPopupEventListeners(popup) {
+  popup.addEventListener('mousedown', evt => {
+    if (evt.target.classList.contains('popup')) closePopup(popup);
+  });
+  popup.addEventListener('keydown', evt => {
+    if (evt.keyCode == 27) closePopup(popup);
+  });
+}
+
+function removePopupEventListeners(popup) {
+  popup.removeEventListener('keydown', evt => {
+    if (evt.keyCode == 27) closePopup(popup);
+  });
+  popup.removeEventListener('keydown', evt => {
+    if (evt.target.classList.contains('popup')) closePopup(popup);
+  });
+}
+
+setFormValuesOnLaunch();
+
 cancelButtons.forEach(button => {
   const popup = button.closest('.popup');
   button.addEventListener('click', () => closePopup(popup));
 });
 
 editButton.addEventListener('click', () => {
-  formName.value = userName.textContent;
-  formJob.value = job.textContent;
+  setFormValuesOnLaunch();
   openPopup(popupEdit);
 });
 
