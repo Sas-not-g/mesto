@@ -1,3 +1,8 @@
+import { initialCards } from './constants.js';
+import { validationConfig } from './constants.js';
+import { disableButton } from './validate.js';
+import { enableButton } from './validate.js';
+
 const editButton = document.querySelector('.profile__button_type_edit');
 const cancelButtons = document.querySelectorAll('.popup__button_type_cancel');
 const addButton = document.querySelector('.profile__button_type_add');
@@ -10,6 +15,8 @@ const formLink = document.querySelector('.popup__input_type_place-link');
 const grid = document.querySelector('.photo-grid');
 const popupEdit = document.querySelector('.popup_type_edit');
 const popupAdd = document.querySelector('.popup_type_add');
+const cardSubmitButton = popupAdd.querySelector('.popup__button_type_submit');
+const profileSubmitButton = popupEdit.querySelector('.popup__button_type_submit');
 const popupPicture = document.querySelector('.popup_type_picture');
 const popupImageElement = document.querySelector('.popup__picture');
 const profileForm = popupEdit.querySelector('.popup__form');
@@ -17,39 +24,12 @@ const cardForm = popupAdd.querySelector('.popup__form');
 const popupPictureCaption = document.querySelector('.popup__picture-caption');
 const gridCardTemplateContent = document.querySelector('.cardTemplate').content;
 
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
-
 initialCards.forEach(card => {
   const gridElement = createCard(card);
   grid.append(gridElement);
 });
 
-function setFormValuesOnLaunch() {
+function setEditFormValuesOnLaunch() {
   formName.value = userName.textContent;
   formJob.value = job.textContent;
 }
@@ -65,7 +45,6 @@ function createCard(card) {
 
   gridCardImage.setAttribute('src', card.link);
   gridCardImage.setAttribute('alt', card.name);
-  console.log(card.name);
   gridCard.querySelector('.photo-grid__description').textContent = card.name;
 
   return gridCard;
@@ -73,7 +52,7 @@ function createCard(card) {
 
 function openPopup(chosenPopup) {
   chosenPopup.classList.add('popup_opened');
-  setPopupEventListeners(chosenPopup);
+  document.addEventListener('keydown', closePopupByEscape);
 }
 
 function handleProfileFormSubmit(event) {
@@ -93,11 +72,12 @@ function handleCardFormSubmit(event) {
   grid.prepend(gridElement);
   closePopup(popupAdd);
   event.target.reset();
+  disableButton(cardSubmitButton, validationConfig.inactiveButtonClass);
 }
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
-  removePopupEventListeners(popup);
+  document.removeEventListener('keydown', closePopupByEscape);
 }
 
 function like(event) {
@@ -115,25 +95,19 @@ function openPicture(cardLink, cardName) {
   openPopup(popupPicture);
 }
 
-function setPopupEventListeners(popup) {
-  popup.addEventListener('mousedown', evt => {
-    if (evt.target.classList.contains('popup')) closePopup(popup);
-  });
-  popup.addEventListener('keydown', evt => {
-    if (evt.keyCode == 27) closePopup(popup);
-  });
+const closePopupByOverlayClick = evt => {
+  if (evt.target.classList.contains('popup')) closePopup(evt.currentTarget);
+};
+
+function closePopupByEscape(evt) {
+  if (evt.key == 'Escape') closePopup(document.querySelector('.popup_opened'));
 }
 
-function removePopupEventListeners(popup) {
-  popup.removeEventListener('keydown', evt => {
-    if (evt.keyCode == 27) closePopup(popup);
-  });
-  popup.removeEventListener('keydown', evt => {
-    if (evt.target.classList.contains('popup')) closePopup(popup);
-  });
-}
+setEditFormValuesOnLaunch();
 
-setFormValuesOnLaunch();
+document
+  .querySelectorAll('.popup')
+  .forEach(popup => popup.addEventListener('click', closePopupByOverlayClick));
 
 cancelButtons.forEach(button => {
   const popup = button.closest('.popup');
@@ -141,7 +115,8 @@ cancelButtons.forEach(button => {
 });
 
 editButton.addEventListener('click', () => {
-  setFormValuesOnLaunch();
+  enableButton(profileSubmitButton, validationConfig.inactiveButtonClass);
+  setEditFormValuesOnLaunch();
   openPopup(popupEdit);
 });
 

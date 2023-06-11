@@ -1,15 +1,17 @@
+import { validationConfig } from './constants.js';
+
 const enableValidation = settings => {
-  Array.from(document.querySelectorAll(settings['formSelector'])).forEach(form => {
+  Array.from(document.querySelectorAll(settings.formSelector)).forEach(form => {
     form.addEventListener('submit', function (evt) {
       evt.preventDefault();
     });
     setEventListeners(
       form,
-      Array.from(form.querySelectorAll(settings['inputSelector'])),
-      form.querySelector(settings['submitButtonSelector']),
-      settings['inactiveButtonClass'],
-      settings['inputErrorClass'],
-      settings['errorClass']
+      Array.from(form.querySelectorAll(settings.inputSelector)),
+      form.querySelector(settings.submitButtonSelector),
+      settings.inactiveButtonClass,
+      settings.inputErrorClass,
+      settings.errorClass
     );
   });
 };
@@ -53,13 +55,21 @@ const hideInputError = (input, errorElement, inputErrorClass, errorClass) => {
 
 const toggleButtonState = (inputs, submitButton, buttonInactiveClass) => {
   if (hasInvalidInput(inputs)) {
-    submitButton.classList.add(buttonInactiveClass);
-    submitButton.setAttribute('disabled', '');
+    disableButton(submitButton, buttonInactiveClass);
   } else {
-    submitButton.classList.remove(buttonInactiveClass);
-    submitButton.removeAttribute('disabled', '');
+    enableButton(submitButton, buttonInactiveClass);
   }
 };
+
+function disableButton(button, classToBeAdded) {
+  button.classList.add(classToBeAdded);
+  button.setAttribute('disabled', '');
+}
+
+function enableButton(button, classToBeRemoved) {
+  button.classList.remove(classToBeRemoved);
+  button.removeAttribute('disabled', '');
+}
 
 const hasInvalidInput = inputs => {
   return inputs.some(input => {
@@ -67,11 +77,7 @@ const hasInvalidInput = inputs => {
   });
 };
 
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-});
+enableValidation(validationConfig);
+
+export { disableButton };
+export { enableButton };
