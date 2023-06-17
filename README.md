@@ -7,7 +7,7 @@ _-this project is educational and was completed during studies at Yandex Practic
 - HTML 5
 - CSS 3
 - JavaScript (ES 6)
-- OOp
+- OOP
 - BEM (Nested)
 - git/github
 - Figma
