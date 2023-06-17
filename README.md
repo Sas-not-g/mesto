@@ -25,6 +25,7 @@ _-this project is educational and was completed during studies at Yandex Practic
 - Layout created according to Figma;
 - adaptive layout;
 - github pages hosting;
+- only Russian language UI
 
 ### Project page link :globe_with_meridians: :
 
