@@ -17,7 +17,7 @@ _-this project is educational and was completed during studies at Yandex Practic
 - Possibility to change the user profile data;
 - Addition and deletion of photo-cards
 - Ability to like/dislike photo-cards
-- Ability to 'loop' clicked image through creating a popup;
+- Ability to increase size of a clicked image through creating a popup;
 - Form validation
 
 ### Project features :
@@ -25,7 +25,8 @@ _-this project is educational and was completed during studies at Yandex Practic
 - Layout created according to Figma;
 - adaptive layout;
 - github pages hosting;
-- only Russian language UI
+- JS written according to the OOP rules;
+- only Russian language UI;
 
 ### Project page link :globe_with_meridians: :
 
