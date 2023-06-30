@@ -1,7 +1,7 @@
 import { initialCards } from './constants.js';
-import { validationConfig } from './constants.js';
-import { disableButton } from './validate.js';
-import { enableButton } from './validate.js';
+import { Card } from './card.js';
+import { validationConfig as config } from './constants.js';
+import { FormValidator } from './formValidator.js';
 
 const editButton = document.querySelector('.profile__button_type_edit');
 const cancelButtons = document.querySelectorAll('.popup__button_type_cancel');
@@ -15,18 +15,17 @@ const formLink = document.querySelector('.popup__input_type_place-link');
 const grid = document.querySelector('.photo-grid');
 const popupEdit = document.querySelector('.popup_type_edit');
 const popupAdd = document.querySelector('.popup_type_add');
-const cardSubmitButton = popupAdd.querySelector('.popup__button_type_submit');
-const profileSubmitButton = popupEdit.querySelector('.popup__button_type_submit');
-const popupPicture = document.querySelector('.popup_type_picture');
-const popupImageElement = document.querySelector('.popup__picture');
 const profileForm = popupEdit.querySelector('.popup__form');
 const cardForm = popupAdd.querySelector('.popup__form');
-const popupPictureCaption = document.querySelector('.popup__picture-caption');
-const gridCardTemplateContent = document.querySelector('.cardTemplate').content;
+const cardTemplateSelector = '.cardTemplate';
+export const popupPictureCaption = document.querySelector('.popup__picture-caption');
+export const popupPicture = document.querySelector('.popup_type_picture');
+export const popupImageElement = document.querySelector('.popup__picture');
 
 initialCards.forEach(card => {
-  const gridElement = createCard(card);
-  grid.append(gridElement);
+  const gridElement = new Card(card, cardTemplateSelector);
+  const newCard = gridElement.createCard();
+  grid.append(newCard);
 });
 
 function setEditFormValuesOnLaunch() {
@@ -34,23 +33,7 @@ function setEditFormValuesOnLaunch() {
   formJob.value = job.textContent;
 }
 
-function createCard(card) {
-  const gridCard = gridCardTemplateContent.cloneNode(true);
-  const gridCardImage = gridCard.querySelector('.photo-grid__picture');
-  const gridCardLike = gridCard.querySelector('.photo-grid__like-button');
-  const gridCardDelete = gridCard.querySelector('.photo-grid__delete-button');
-  gridCardImage.addEventListener('click', () => openPicture(card.link, card.name));
-  gridCardLike.addEventListener('click', like);
-  gridCardDelete.addEventListener('click', deleteCard);
-
-  gridCardImage.setAttribute('src', card.link);
-  gridCardImage.setAttribute('alt', card.name);
-  gridCard.querySelector('.photo-grid__description').textContent = card.name;
-
-  return gridCard;
-}
-
-function openPopup(chosenPopup) {
+export function openPopup(chosenPopup) {
   chosenPopup.classList.add('popup_opened');
   document.addEventListener('keydown', closePopupByEscape);
 }
@@ -68,31 +51,17 @@ function handleCardFormSubmit(event) {
     name: formPlace.value,
     link: formLink.value
   };
-  const gridElement = createCard(placeFormValues);
-  grid.prepend(gridElement);
+  const gridElement = new Card(placeFormValues, '.cardTemplate');
+  const newCard = gridElement.createCard();
+  grid.prepend(newCard);
+
   closePopup(popupAdd);
   event.target.reset();
-  disableButton(cardSubmitButton, validationConfig.inactiveButtonClass);
 }
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', closePopupByEscape);
-}
-
-function like(event) {
-  event.target.classList.toggle('photo-grid__like-button_active');
-}
-
-function deleteCard(event) {
-  event.target.closest('.photo-grid__element').remove();
-}
-
-function openPicture(cardLink, cardName) {
-  popupImageElement.src = cardLink;
-  popupImageElement.alt = cardName;
-  popupPictureCaption.textContent = cardName;
-  openPopup(popupPicture);
 }
 
 const closePopupByOverlayClick = evt => {
@@ -115,9 +84,13 @@ cancelButtons.forEach(button => {
 });
 
 editButton.addEventListener('click', () => {
-  enableButton(profileSubmitButton, validationConfig.inactiveButtonClass);
   setEditFormValuesOnLaunch();
   openPopup(popupEdit);
+});
+
+Array.from(document.querySelectorAll(config.formSelector)).forEach(form => {
+  const newForm = new FormValidator(config, form);
+  newForm.enableValidation();
 });
 
 addButton.addEventListener('click', () => openPopup(popupAdd));
