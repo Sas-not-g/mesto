@@ -1,16 +1,18 @@
-import { popupPicture, popupImageElement, popupPictureCaption, openPopup } from './index.js';
-
 export class Card {
-  constructor(cardData, cardTemplate) {
+  constructor(cardData, cardTemplate, popupImage, popupPictureCaption, popupPicture, openPopup) {
     this._cardData = cardData;
     this._gridCard = document.querySelector(cardTemplate).content.cloneNode(true);
     this._gridCardImage = this._gridCard.querySelector('.photo-grid__picture');
     this._gridCardLike = this._gridCard.querySelector('.photo-grid__like-button');
     this._gridCardDelete = this._gridCard.querySelector('.photo-grid__delete-button');
+    this._popupImage = popupImage;
+    this._popupPictureCaption = popupPictureCaption;
+    this._popupPicture = popupPicture;
+    this._openPopup = openPopup;
   }
 
   createCard() {
-    this._addEventListeners();
+    this._addEventListeners(); //#
 
     this._gridCardImage.setAttribute('src', this._cardData.link);
     this._gridCardImage.setAttribute('alt', this._cardData.name);
@@ -21,9 +23,7 @@ export class Card {
   }
 
   _addEventListeners() {
-    this._gridCardImage.addEventListener('click', () =>
-      this._openPicture(this._cardData.link, this._cardData.name)
-    );
+    this._gridCardImage.addEventListener('click', () => this._openPicture());
     this._gridCardLike.addEventListener('click', () => this._like());
     this._gridCardDelete.addEventListener('click', this._deleteCard);
   }
@@ -37,10 +37,9 @@ export class Card {
   }
 
   _openPicture() {
-    popupImageElement.src = this._cardData.link;
-    popupImageElement.alt = this._cardData.name;
-    popupPictureCaption.textContent = this._cardData.name;
-
-    openPopup(popupPicture);
+    this._popupImage.src = this._cardData.link;
+    this._popupImage.alt = this._cardData.name;
+    this._popupPictureCaption.textContent = this._cardData.name;
+    this._openPopup(this._popupPicture);
   }
 }
