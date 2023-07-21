@@ -1,5 +1,12 @@
 export class Card {
-  constructor(cardData, cardTemplate, popupImage, popupPictureCaption, popupPicture, openPopup) {
+  constructor(
+    cardData,
+    cardTemplate,
+    popupImage,
+    popupPictureCaption,
+    popupPicture,
+    handleCardClick
+  ) {
     this._cardData = cardData;
     this._gridCard = document.querySelector(cardTemplate).content.cloneNode(true);
     this._gridCardImage = this._gridCard.querySelector('.photo-grid__picture');
@@ -8,7 +15,7 @@ export class Card {
     this._popupImage = popupImage;
     this._popupPictureCaption = popupPictureCaption;
     this._popupPicture = popupPicture;
-    this._openPopup = openPopup;
+    this._handleCardClick = handleCardClick;
   }
 
   createCard() {
@@ -40,6 +47,6 @@ export class Card {
     this._popupImage.src = this._cardData.link;
     this._popupImage.alt = this._cardData.name;
     this._popupPictureCaption.textContent = this._cardData.name;
-    this._openPopup(this._popupPicture);
+    this._handleCardClick(this._popupPicture);
   }
 }
