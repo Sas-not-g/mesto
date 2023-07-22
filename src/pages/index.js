@@ -18,13 +18,18 @@ const grid = document.querySelector('.photo-grid');
 const popupPictureCaption = document.querySelector('.popup__picture-caption');
 const popupPicture = document.querySelector('.popup_type_picture');
 const popupImageElement = document.querySelector('.popup__picture');
+const formsArray = Array.from(document.querySelectorAll(config.formSelector));
 
-const newCards = new Section({ items: initialCards, renderer: createNewCard }, '.photo-grid');
-newCards.renderItems();
+const popupImage = new PopupWithImage('.popup_type_picture');
+popupImage.setEventListeners();
+
+const cards = new Section({ items: initialCards, renderer: createNewCard }, '.photo-grid');
+cards.renderItems();
 
 const handleCardFormSubmit = formValues => {
-  const cardValues = { name: formValues[0].value, link: formValues[1].value };
-  grid.prepend(createNewCard(cardValues));
+  const cardValues = [{ name: formValues[0].value, link: formValues[1].value }];
+  const newCard = new Section({ items: cardValues, renderer: createNewCard }, '.photo-grid');
+  newCard.renderItems();
   cardFormPopup.close();
 };
 
@@ -43,40 +48,36 @@ function handleProfileFormSubmit(formValues) {
   const profileValues = { name: formValues[0].value, job: formValues[1].value };
 
   userData.setUserInfo(profileValues);
-
-  userName.textContent = formName.value;
-  job.textContent = formJob.value;
   editFormPopup.close();
 }
 
 function createNewCard(formValues) {
-  const popupForCard = new PopupWithImage('.popup_type_picture', {
-    link: formValues.link,
-    name: formValues.name
-  });
-
   const gridElement = new Card(
     formValues,
     '.cardTemplate',
     popupImageElement,
     popupPictureCaption,
     popupPicture,
-    popupForCard.open.bind(popupForCard)
+    popupImage.open
   );
   const newCard = gridElement.createCard();
   return newCard;
 }
 
-Array.from(document.querySelectorAll(config.formSelector)).forEach(form => {
-  const newForm = new FormValidator(config, form);
-  newForm.enableValidation();
-});
+const editForm = new FormValidator(config, formsArray[0]);
+editForm.enableValidation();
+
+const addForm = new FormValidator(config, formsArray[1]);
+addForm.enableValidation();
 
 editButton.addEventListener('click', () => {
+  editForm.resetValidation();
   const editFormStartValues = userData.getUserInfo();
-  formName.value = editFormStartValues.name;
-  formJob.value = editFormStartValues.job;
+  editFormPopup.setInputValues(editFormStartValues);
   editFormPopup.open();
 });
 
-addButton.addEventListener('click', () => cardFormPopup.open());
+addButton.addEventListener('click', () => {
+  addForm.resetValidation();
+  cardFormPopup.open();
+});

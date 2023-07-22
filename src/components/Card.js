@@ -44,9 +44,6 @@ export class Card {
   }
 
   _openPicture() {
-    this._popupImage.src = this._cardData.link;
-    this._popupImage.alt = this._cardData.name;
-    this._popupPictureCaption.textContent = this._cardData.name;
-    this._handleCardClick(this._popupPicture);
+    this._handleCardClick({ name: this._cardData.name, link: this._cardData.link });
   }
 }
