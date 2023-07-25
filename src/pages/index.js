@@ -27,9 +27,10 @@ const cards = new Section({ items: initialCards, renderer: createNewCard }, '.ph
 cards.renderItems();
 
 const handleCardFormSubmit = formValues => {
-  const cardValues = [{ name: formValues[0].value, link: formValues[1].value }];
-  const newCard = new Section({ items: cardValues, renderer: createNewCard }, '.photo-grid');
-  newCard.renderItems();
+  const cardValues = { name: formValues[0].value, link: formValues[1].value };
+
+  cards.addItem(createNewCard(cardValues));
+
   cardFormPopup.close();
 };
 
