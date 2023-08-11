@@ -74,7 +74,7 @@ const userData = new UserInfo({
 });
 
 function handleAvatarFormSubmit(newAvatarLink) {
-  const link = newAvatarLink[0].value;
+  const link = newAvatarLink.avatarLink;
   avatarFormPopup.renderLoading(true);
   api
     .changeAvatar(link)
