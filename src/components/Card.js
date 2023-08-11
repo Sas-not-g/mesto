@@ -7,14 +7,17 @@ export class Card {
     popupPicture,
     handleCardClick,
     openDeletePopup,
+    closeDeletePopup,
     deleteCardFromServer,
     setLike,
-    removeLike
+    removeLike,
+    userId
   ) {
     this._cardData = cardData;
     this._cardLikes = this._cardData.likes;
     this._amountOfLikes = this._cardLikes.length;
     this._cardId = this._cardData._id;
+    this._thisUserId = userId;
     this._userId = this._cardData.owner._id;
     this._gridCard = document.querySelector(cardTemplate).content.cloneNode(true);
     this._gridCardImage = this._gridCard.querySelector('.photo-grid__picture');
@@ -26,10 +29,12 @@ export class Card {
     this._popupPicture = popupPicture;
     this._handleCardClick = handleCardClick;
     this._openDeletePopup = openDeletePopup;
+    this._closeDeletePopup = closeDeletePopup;
     this._deleteCardFromServer = deleteCardFromServer;
     this._setLike = setLike;
     this._removeLike = removeLike;
     this._deleteCard = this._deleteCard.bind(this);
+    this._changeLikes = this._changeLikes.bind(this);
   }
 
   createCard() {
@@ -39,7 +44,7 @@ export class Card {
     this._gridCardImage.setAttribute('src', this._cardData.link);
     this._gridCardImage.setAttribute('alt', this._cardData.name);
 
-    if (this._userId != '13b67ab4d476c96ad6806179') {
+    if (this._userId != this._thisUserId) {
       this._gridCardDelete.remove();
     } else {
       this._gridCardDelete.addEventListener('click', evt => {
@@ -60,7 +65,7 @@ export class Card {
 
   _setInitialLikes() {
     this._cardLikes.forEach(like => {
-      if (like._id == '13b67ab4d476c96ad6806179') {
+      if (like._id == this._thisUserId) {
         this._toggleLike();
       }
     });
@@ -69,14 +74,19 @@ export class Card {
 
   _handleLikeClick() {
     if (this._gridCardLike.classList.contains('photo-grid__like-button_active')) {
-      this._removeLike(this._cardId);
-      this._amountOfLikes -= 1;
-      this._toggleLike();
+      this._removeLike(this._cardId)
+        .then(this._changeLikes)
+        .catch(err => console.error(err));
     } else {
-      this._setLike(this._cardId);
-      this._amountOfLikes += 1;
-      this._toggleLike();
+      this._setLike(this._cardId)
+        .then(this._changeLikes)
+        .catch(err => console.error(err));
     }
+  }
+
+  _changeLikes(res) {
+    this._amountOfLikes = res.likes.length;
+    this._toggleLike();
   }
 
   _toggleLike() {
@@ -85,10 +95,11 @@ export class Card {
   }
 
   _deleteCard() {
-    this._cardEvent.target.closest('.photo-grid__element').remove();
     this._deleteCardFromServer(this._cardId)
-      .then(res => res.json())
-      .then(res => console.log(res))
+      .then(() => {
+        this._cardEvent.target.closest('.photo-grid__element').remove();
+        this._closeDeletePopup();
+      })
       .catch(err => console.error(err));
   }
 

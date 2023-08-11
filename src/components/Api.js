@@ -1,27 +1,27 @@
 export default class Api {
   constructor(options) {
-    this.url = options.baseUrl;
-    this.headers = options.headers;
+    this._baseUrl = options.baseUrl;
+    this._url = this._baseUrl;
+    this._headers = options.headers;
     this.setLike = this.setLike.bind(this);
     this.removeLike = this.removeLike.bind(this);
+    this.deleteCard = this.deleteCard.bind(this);
+    this.postNewCard = this.postNewCard.bind(this);
+    this._request = this._request.bind(this);
+    this._checkResponse = this._checkResponse.bind(this);
   }
 
   getInitialCards() {
-    return fetch(`${this.url}/cards`, {
-      headers: this.headers
-    });
+    return this._request('/cards', {});
   }
 
   getUserData() {
-    return fetch(`${this.url}/users/me`, {
-      headers: this.headers
-    });
+    return this._request('/users/me', {});
   }
 
   patchUserData(data) {
-    return fetch(`${this.url}/users/me`, {
+    return this._request('/users/me', {
       method: 'PATCH',
-      headers: this.headers,
       body: JSON.stringify({
         name: data.name,
         about: data.about
@@ -30,9 +30,8 @@ export default class Api {
   }
 
   postNewCard(data) {
-    return fetch(`${this.url}/cards`, {
+    return this._request('/cards', {
       method: 'POST',
-      headers: this.headers,
       body: JSON.stringify({
         name: data.name,
         link: data.link
@@ -41,18 +40,12 @@ export default class Api {
   }
 
   deleteCard(cardId) {
-    return fetch(`https://mesto.nomoreparties.co/v1/cohort-72/cards/${cardId}`, {
-      method: 'DELETE',
-      headers: {
-        authorization: 'd8bbc101-a274-46e9-a640-da9ddbf514a8'
-      }
-    });
+    return this._request(`/cards/${cardId}`, { method: 'DELETE' });
   }
 
   changeAvatar(newAvatarLink) {
-    return fetch(`${this.url}/users/me/avatar`, {
+    return this._request('/users/me/avatar', {
       method: 'PATCH',
-      headers: this.headers,
       body: JSON.stringify({
         avatar: newAvatarLink
       })
@@ -60,16 +53,22 @@ export default class Api {
   }
 
   setLike(cardId) {
-    return fetch(`${this.url}/cards/${cardId}/likes`, {
-      method: 'PUT',
-      headers: this.headers
-    });
+    return this._request(`/cards/${cardId}/likes`, { method: 'PUT' });
   }
 
   removeLike(cardId) {
-    return fetch(`${this.url}/cards/${cardId}/likes`, {
-      method: 'DELETE',
-      headers: this.headers
-    });
+    return this._request(`/cards/${cardId}/likes`, { method: 'DELETE' });
+  }
+
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка ${res.status}`);
+  }
+
+  _request(url, settings) {
+    settings.headers = this._headers;
+    return fetch(this._baseUrl + url, settings).then(this._checkResponse);
   }
 }

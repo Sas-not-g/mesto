@@ -1,8 +1,8 @@
 export class FormValidator {
   constructor(config, formElement) {
     this._form = formElement;
-    (this._inputs = Array.from(this._form.querySelectorAll(config.inputSelector))),
-      (this._submitButton = this._form.querySelector(config.submitButtonSelector));
+    this._inputs = Array.from(this._form.querySelectorAll(config.inputSelector));
+    this._submitButton = this._form.querySelector(config.submitButtonSelector);
     this._inactiveButtonClass = config.inactiveButtonClass;
     this._inputErrorClass = config.inputErrorClass;
     this._errorClass = config.errorClass;
@@ -18,7 +18,8 @@ export class FormValidator {
   resetValidation() {
     this._toggleButtonState();
     this._inputs.forEach(input => {
-      this._hideInputError(input, this._form.querySelector(`.${input.name}-error`));
+      this._errorElement = this._form.querySelector(`.${input.name}-error`);
+      this._hideInputError(input);
     });
   }
 
@@ -33,23 +34,24 @@ export class FormValidator {
   }
 
   _checkInputValidity(input) {
+    this._errorElement = this._form.querySelector(`.${input.name}-error`);
     if (!input.validity.valid) {
-      this._showInputError(input, this._form.querySelector(`.${input.name}-error`));
+      this._showInputError(input);
     } else {
-      this._hideInputError(input, this._form.querySelector(`.${input.name}-error`));
+      this._hideInputError(input);
     }
   }
 
-  _showInputError(input, errorElement) {
+  _showInputError(input) {
     input.classList.add(this._inputErrorClass);
-    errorElement.textContent = input.validationMessage;
-    errorElement.classList.add(this._errorClass);
+    this._errorElement.textContent = input.validationMessage;
+    this._errorElement.classList.add(this._errorClass);
   }
 
-  _hideInputError(input, errorElement) {
+  _hideInputError(input) {
     input.classList.remove(this._inputErrorClass);
-    errorElement.textContent = '';
-    errorElement.classList.remove(this._errorClass);
+    this._errorElement.textContent = '';
+    this._errorElement.classList.remove(this._errorClass);
   }
 
   _toggleButtonState() {
